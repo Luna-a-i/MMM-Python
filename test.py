@@ -1,5 +1,12 @@
+import time
+
+print("start")
+
+time.sleep(3)
+
+
 print({
-    "status": "failed",
+    "status": "success",
     "height": 183,
     "width": 75
 })

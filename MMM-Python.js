@@ -55,6 +55,8 @@ Module.register("MMM-Python", {
   waitEnd: async function() {
     this.bg._title.remove();
     this.bg._text.remove();
+    this.bg.textDiv.remove();
+    this.bg.screen._camera = "";
     await this.bg.classList.remove("show");
     await __sleep(500);
     this.bg.remove();
@@ -67,18 +69,32 @@ Module.register("MMM-Python", {
     form.screen = await document.createElement("div");
     form.screen.id = "cameraScreen";
     form.appendChild(form.screen);
-    form._camera = await document.createElement("video");
+    // form._camera = await document.createElement("video");
+    form._camera = new Image();
+    form._camera.style.display = "none";
+    // form._camera.src = "http://192.168.1.28:5000/startStream";
+    form._camera.src = "http://localhost:5000/startStream/" + Math.random();
+    // form._camera.src = "http://via.placeholder.com/480x848";
+    form._camera.onerror = async () => {
+      await __sleep(1000);
+      form._camera.src = "http://localhost:5000/startStream/" + Math.random();
+    }
+    form._camera.onload = async () => {
+      form._camera.style.display = "block";
+    }
+    form.screen.appendChild(form._camera);
     form._text = await document.createElement("div");
     form._text.id = "cameraText";
     form._text.innerText = "측정 중...";
     form.appendChild(form._text);
+    this.bg.screen = form;
   },
 
   socketNotificationReceived: function(noti, payload) {
-    if (payload) {
-      payload = payload.replace(/'/gi, "\"");
-
-    }
+    // if (payload) {
+    //   payload = payload.replace(/'/gi, "\"");
+    //
+    // }
 
     if (noti == "STARTPYTHON") {
       this.bg._text.innerText = "신체 측정을 위한 카메라를 연결하는 중입니다..."
@@ -89,12 +105,19 @@ Module.register("MMM-Python", {
       // 카메라 URL을 받은 후다. 화면에 카메라를 뿌려준다. 측정될때까지 대기
       this.bg._text.innerText = "신체 측정을 진행 중입니다... 카메라 앞에 서주세요."
       this.connectCamera();
-      console.log("STARTCHECK -> CHECKING");
-      this.sendSocketNotification("CHECKING");
 
     } else if (noti == "ENDPYTHON") {
-      console.log("ENDPYTHON");
-      // this.waitEnd();
+      if (payload.status == "success") {
+        // alert("[DEBUG] 키는 : "+ payload.height);
+        // setTimeout(() => {
+        //   this.waitEnd();
+        // },2000);
+
+        this.waitEnd();
+      } else {
+        alert("[DEBUG] 카메라 모듈에서 정상적인 데이터를 가져오지 못했습니다");
+        this.waitEnd();
+      }
     }
   },
   IsJsonString: function(str) {

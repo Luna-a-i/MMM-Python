@@ -14,15 +14,20 @@ module.exports = NodeHelper.create({
     } else if (noti == "START") {
       this.startInit()
     } else if (noti == "STARTPYTHON") {
-      var pyshell = new PythonShell('/srv/MagicMirror/modules/MMM-Python/test.py');
-      // var pyshell = new PythonShell('/home/mirror/Downloads/jetson-interface/python/examples/test2.py');
+      // var pyshell = new PythonShell('/srv/MagicMirror/modules/MMM-Python/test.py');
+      var pyshell = new PythonShell('/srv/MagicMirror/modules/MMM-Python/flask_test.py', {
+        pythonOptions: ['-u']
+      });
       // PythonShell.run('/srv/MagicMirror/modules/MMM-Python/test.py', null, (err, results) => {
       //   if (err) throw err;
       //   console.log(`results: ${results}`);
       //   this.sendSocketNotification("STARTPYTHON", results);
       // })
       pyshell.on('message', message => {
-        console.log(message);
+        console.log("[:" + message + ":]");
+        if (message) {
+          message = message.replace(/'/gi, "\"");
+        }
 
         function IsJsonString(str) {
           try {
@@ -33,19 +38,13 @@ module.exports = NodeHelper.create({
           }
         }
         if (IsJsonString(message)) {
-          this.sendSocketNotification("STARTPYTHON", JSON.parse(message));
-        } else {
-          this.sendSocketNotification("STARTPYTHON", message);
+          pyshell.kill('SIGINT');
+          this.sendSocketNotification("ENDPYTHON", JSON.parse(message));
+        } else if (message == "start") {
+          this.sendSocketNotification("STARTCHECK");
         }
 
       })
-    } else if (noti == "CHECKCAMERA") {
-      // 카메라 연결 체크하기. 카메라가 제대로 연결되어있어서 스트리밍 주소를 준다면 소켓 알림으로 보내기
-      this.sendSocketNotification("STARTCHECK");
-    } else if (noti == "CHECKING") {
-      // 카메라 측정완료될 때 까지 대기
-
-      this.sendSocketNotification("ENDPYTHON");
     }
   },
   initialize: function() {
