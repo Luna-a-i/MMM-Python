@@ -10,25 +10,53 @@ module.exports = NodeHelper.create({
 
   socketNotificationReceived: function(noti, payload) {
     if (noti == "INIT") {
-      this.initialize()
+      this.initialize(payload)
     } else if (noti == "START") {
       this.startInit()
     } else if (noti == "STARTPYTHON") {
-      // var pyshell = new PythonShell('/srv/MagicMirror/modules/MMM-Python/test.py');
-      var pyshell = new PythonShell('/srv/MagicMirror/modules/MMM-Python/flask_test.py', {
-        pythonOptions: ['-u']
-      });
+      if (this.config.debug == true) {
+        var pyshell = new PythonShell('/srv/MagicMirror/modules/MMM-Python/test.py');
+      } else {
+        var pyshell = new PythonShell('/srv/MagicMirror/modules/MMM-Python/flask_test.py', {
+          pythonOptions: ['-u']
+        });
+      }
+
+
+
+
+
       // PythonShell.run('/srv/MagicMirror/modules/MMM-Python/test.py', null, (err, results) => {
       //   if (err) throw err;
       //   console.log(`results: ${results}`);
       //   this.sendSocketNotification("STARTPYTHON", results);
       // })
-      pyshell.on('message', message => {
-        console.log("[:" + message + ":]");
-        if (message) {
-          message = message.replace(/'/gi, "\"");
-        }
+      var pyLoadTimer = setTimeout(() => {
+        pyshell.kill('SIGINT');
+        this.sendSocketNotification("ENDPYTHON", {
+          status: "failed",
+          err: "카메라가 장시간동안 응답하지 않습니다."
+        });
+        clearTimeout(pyLoadTimer);
+      }, 20000);
+      console.log(this.config);
+      if (this.config.debug == true) {
+        // setTimeout(() => {
+        //   pyshell.kill('SIGINT');
+        //   this.sendSocketNotification("ENDPYTHON", {
+        //     status: "success",
+        //     height: 183
+        //   });
+        // }, 3000);
+        clearTimeout(pyLoadTimer);
+      }
 
+      pyshell.on('message', message => {
+        //	console.log("[:" + message + ":]");
+        if (message) {
+          message = message.replace(/'/g, '"');
+        }
+        //       console.log("[:" + message + ":]");
         function IsJsonString(str) {
           try {
             var json = JSON.parse(str);
@@ -37,18 +65,28 @@ module.exports = NodeHelper.create({
             return false;
           }
         }
+        console.log("JSOOOONN", message);
         if (IsJsonString(message)) {
-          pyshell.kill('SIGINT');
-          this.sendSocketNotification("ENDPYTHON", JSON.parse(message));
+          var json = JSON.parse(message);
+          console.log(json.status);
+          if (json.status == "success") {
+            pyshell.kill('SIGINT');
+            this.sendSocketNotification("ENDPYTHON", json);
+
+          } else if (json.status = "draw") {
+            this.sendSocketNotification("DRAWSQUARE", json.draw);
+          }
         } else if (message == "start") {
+          clearTimeout(pyLoadTimer);
           this.sendSocketNotification("STARTCHECK");
         }
 
       })
     }
   },
-  initialize: function() {
+  initialize: function(payload) {
     console.log(" ::: Load Python ::: Initializing");
+    this.config = payload;
   },
   startInit: function() {
     console.log(" ::: News KOR ::: Starting");

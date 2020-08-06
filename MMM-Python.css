@@ -44,6 +44,24 @@
   font-size: 0.8em;
 }
 
+.peopleSquareText {
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+.peopleSquareDot {
+  width: 0px;
+  height: 0px;
+  border: 2px solid red;
+  position: absolute;
+
+}
+.peopleSquareDotText {
+  color: red;
+  top: -25px;
+  left: 10px;
+  position: absolute;
+  font-size: 0.7em;
+}
+
 #cameraFrame {
   background-color: rgba(3,3,3,0.7);
   width: 100%;
@@ -57,6 +75,7 @@
   left: calc(50% - 240px);
   position: relative;
 }
+
 #cameraText {
   margin-top: 10px;
   font-size: 0.9em;
