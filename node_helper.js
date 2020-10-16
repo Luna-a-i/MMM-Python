@@ -17,7 +17,7 @@ module.exports = NodeHelper.create({
       if (this.config.debug == true) {
         var pyshell = new PythonShell('/srv/MagicMirror/modules/MMM-Python/test.py');
       } else {
-        var pyshell = new PythonShell('/srv/MagicMirror/modules/MMM-Python/flask_test.py', {
+        var pyshell = new PythonShell('/srv/MagicMirror/modules/MMM-Python/flask_final.py', {
           pythonOptions: ['-u']
         });
       }
@@ -74,7 +74,7 @@ module.exports = NodeHelper.create({
             this.sendSocketNotification("ENDPYTHON", json);
 
           } else if (json.status = "draw") {
-            this.sendSocketNotification("DRAWSQUARE", json.draw);
+            this.sendSocketNotification("DRAWSQUARE", json);
           }
         } else if (message == "start") {
           clearTimeout(pyLoadTimer);

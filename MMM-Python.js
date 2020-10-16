@@ -23,6 +23,7 @@ Module.register("MMM-Python", {
       this.wait();
     })
     document.body.appendChild(form);
+    this.peopleButton = form;
   },
   wait: async function() {
     console.log("open BG");
@@ -99,84 +100,102 @@ Module.register("MMM-Python", {
     this.bg.screen = form;
   },
   clearSquare: async function() {
-    var foo = document.querySelectorAll(".peopleSquare");
-    var foo2 = document.querySelectorAll(".peopleSquareText");
-    var foo3 = document.querySelectorAll(".peopleSquareDot");
-    var foo4 = document.querySelectorAll(".peopleSquareDotText");
-    for (var v in foo) {
-      if (foo.hasOwnProperty(v)) {
-        foo[v].remove();
-        foo2[v].remove();
-        foo3[v * 3].remove();
-        foo3[v * 3 + 1].remove();
-        foo3[v * 3 + 2].remove();
-        foo4[v * 3].remove();
-        foo4[v * 3 + 1].remove();
-        foo4[v * 3 + 2].remove();
-      }
-      // await foo[0].remove();
-      // await foo2[0].remove();
-      // await foo3[0].remove();
-      // await foo3[0].remove();
-      // await foo3[0].remove();
-      // await foo4[0].remove();
-      // await foo4[0].remove();
-      // await foo4[0].remove();
-    }
+    // var foo = document.querySelectorAll(".peopleSquare");
+    // var foo2 = document.querySelectorAll(".peopleSquareText");
+    // var foo3 = document.querySelectorAll(".peopleSquareDot");
+    // var foo4 = document.querySelectorAll(".peopleSquareDotText");
+    // for (var v in foo) {
+    //   if (foo.hasOwnProperty(v)) {
+    //     foo[v].remove();
+    //     foo2[v].remove();
+    //     foo3[v * 3].remove();
+    //     foo3[v * 3 + 1].remove();
+    //     foo3[v * 3 + 2].remove();
+    //     foo4[v * 3].remove();
+    //     foo4[v * 3 + 1].remove();
+    //     foo4[v * 3 + 2].remove();
+    //   }
+    //   // await foo[0].remove();
+    //   // await foo2[0].remove();
+    //   // await foo3[0].remove();
+    //   // await foo3[0].remove();
+    //   // await foo3[0].remove();
+    //   // await foo4[0].remove();
+    //   // await foo4[0].remove();
+    //   // await foo4[0].remove();
+    // }
     // var foo2 = await document.getElementsByClassName("peopleSquareText");
     // for (var v in foo2) {
     //   if (await foo2.hasOwnProperty(v)) {
     //   }
     // }
+    var foo = document.querySelectorAll(".peopleTop");
+    var foo2 = document.querySelectorAll(".peopleTopText");
+
+    for (var v in foo) {
+      if (foo.hasOwnProperty(v)) {
+          foo[v].remove();
+          foo2[v].remove();
+      }
+    }
   },
   drawSquare: async function(d) {
     console.log(d);
-    var sq = await document.createElement("div");
-    sq.classList.add("peopleSquare");
-    sq.style.top = d.top + "px";
-    sq.style.height = (d.bottom - d.top) + "px";
-    sq.style.left = d.left + "px";
-    sq.style.width = (d.right - d.left) + "px";
-    sq.style.position = "absolute";
-    sq.style.border = "2px solid green";
-    this.bg.screen.screen.appendChild(sq);
-    var sqText = await document.createElement("div");
-    sqText.classList.add("peopleSquareText");
-    sqText.innerText = (d.height2 * 100).toFixed(2);
-    sqText.style.color = "skyblue";
-    sqText.style.fontWeight = "bold";
-    sqText.style.top = "-43px";
-    sqText.style.left = "0px";
-    sqText.style.position = "absolute";
-    await sq.appendChild(sqText);
-    var dot = [];
-    dot.d1 = document.createElement("div");
-    dot.d2 = document.createElement("div");
-    dot.d3 = document.createElement("div");
-    dot.d1.classList.add("peopleSquareDot");
-    dot.d2.classList.add("peopleSquareDot");
-    dot.d3.classList.add("peopleSquareDot");
-    dot.d1.style.top = d.d1top + "px";
-    dot.d2.style.top = d.d2top + "px";
-    dot.d3.style.top = d.d3top + "px";
-    dot.d1.style.left = d.d1left + "px";
-    dot.d2.style.left = d.d2left + "px";
-    dot.d3.style.left = d.d3left + "px";
-    dot.d1t = document.createElement("div");
-    dot.d2t = document.createElement("div");
-    dot.d3t = document.createElement("div");
-    dot.d1t.classList.add("peopleSquareDotText");
-    dot.d2t.classList.add("peopleSquareDotText");
-    dot.d3t.classList.add("peopleSquareDotText");
-    dot.d1t.innerText = d.d1;
-    dot.d2t.innerText = d.d2;
-    dot.d3t.innerText = d.d3;
-    dot.d1.appendChild(dot.d1t);
-    dot.d2.appendChild(dot.d2t);
-    dot.d3.appendChild(dot.d3t);
-    this.bg.screen.screen.appendChild(dot.d1);
-    this.bg.screen.screen.appendChild(dot.d2);
-    this.bg.screen.screen.appendChild(dot.d3);
+    var vtop = await document.createElement("div");
+    vtop.classList.add("peopleTop");
+    vtop.style.top = d.top+"px";
+    this.bg.screen.screen.vtop = vtop;
+    this.bg.screen.screen.appendChild(vtop);
+    var vtopText = await document.createElement("div");
+    vtopText.classList.add("peopleTopText");
+    vtopText.innerText = d.height;
+    vtop.appendChild(vtopText);
+    // var sq = await document.createElement("div");
+    // sq.classList.add("peopleSquare");
+    // sq.style.top = d.top + "px";
+    // sq.style.height = (d.bottom - d.top) + "px";
+    // sq.style.left = d.left + "px";
+    // sq.style.width = (d.right - d.left) + "px";
+    // sq.style.position = "absolute";
+    // sq.style.border = "2px solid green";
+    // this.bg.screen.screen.appendChild(sq);
+    // var sqText = await document.createElement("div");
+    // sqText.classList.add("peopleSquareText");
+    // sqText.innerText = (d.height2 * 100).toFixed(2);
+    // sqText.style.color = "skyblue";
+    // sqText.style.fontWeight = "bold";
+    // sqText.style.top = "-43px";
+    // sqText.style.left = "0px";
+    // sqText.style.position = "absolute";
+    // await sq.appendChild(sqText);
+    // var dot = [];
+    // dot.d1 = document.createElement("div");
+    // dot.d2 = document.createElement("div");
+    // dot.d3 = document.createElement("div");
+    // dot.d1.classList.add("peopleSquareDot");
+    // dot.d2.classList.add("peopleSquareDot");
+    // dot.d3.classList.add("peopleSquareDot");
+    // dot.d1.style.top = d.d1top + "px";
+    // dot.d2.style.top = d.d2top + "px";
+    // dot.d3.style.top = d.d3top + "px";
+    // dot.d1.style.left = d.d1left + "px";
+    // dot.d2.style.left = d.d2left + "px";
+    // dot.d3.style.left = d.d3left + "px";
+    // dot.d1t = document.createElement("div");
+    // dot.d2t = document.createElement("div");
+    // dot.d3t = document.createElement("div");
+    // dot.d1t.classList.add("peopleSquareDotText");
+    // dot.d2t.classList.add("peopleSquareDotText");
+    // dot.d3t.classList.add("peopleSquareDotText");
+    // dot.d1t.innerText = d.d1;
+    // dot.d2t.innerText = d.d2;
+    // dot.d3t.innerText = d.d3;
+    // dot.d1.appendChild(dot.d1t);
+    // dot.d2.appendChild(dot.d2t);
+    // dot.d3.appendChild(dot.d3t);
+    // this.bg.screen.screen.appendChild(dot.d1);
+    // this.bg.screen.screen.appendChild(dot.d2);
+    // this.bg.screen.screen.appendChild(dot.d3);
   },
 
   socketNotificationReceived: async function(noti, payload) {
@@ -196,24 +215,34 @@ Module.register("MMM-Python", {
       this.connectCamera();
     } else if (noti == "DRAWSQUARE") {
       await this.clearSquare();
-      for (var v in payload) {
-        if (payload.hasOwnProperty(v)) {
-          await this.drawSquare(payload[v]);
-        }
-      }
+      await this.drawSquare(payload);
     } else if (noti == "ENDPYTHON") {
       if (payload.status == "success") {
         // alert("[DEBUG] 키는 : "+ payload.height);
         // setTimeout(() => {
         //   this.waitEnd();
         // },2000);
-
+        this.drawSuccess(payload.height);
         this.waitEnd();
       } else {
         alert("카메라 모듈 연결에 실패했습니다.\n\n사유 : " + payload.err);
         this.waitEnd();
       }
     }
+  },
+  drawSuccess: async function(h) {
+    var form = document.createElement("div");
+    form.id = "viewHeight";
+    form.innerText = h+" cm";
+    this.peopleButton.appendChild(form);
+    function __sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    await __sleep(3000);
+    form.classList.add("hide");
+    await __sleep(1000);
+    form.remove();
   },
   IsJsonString: function(str) {
     try {
